@@ -1,0 +1,17 @@
+{
+    "lang": "zh-TW",
+    "name": "占卜大師",
+    "short_name": "命理",
+    "description": "占卜大師，提供各種占卜服務，包括星座、塔羅牌、生肖、姓名學、手相、面相、八字、風水、夢境、占星學等。",
+    "start_url": "/",
+    "background_color": "#2f3d58",
+    "theme_color": "#2f3d58",
+    "orientation": "any",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "/static/image/icon512.png",
+            "sizes": "512x512"
+        }
+    ]
+}

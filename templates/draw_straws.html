@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="抽籤問事">
+    <link rel="apple-touch-icon" href="/static/image/icon512.png">
+    <title>抽籤問事</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style src="/static/css/style.css"></style>
+    <style>
+        body {
+            background-image: url("/static/image/0080c0f2-40a6-4e5c-9d1e-81a109cc5e83.webp");
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+
+
+<body class="font-sans text-gray-800 antialiased m-0" style="background-image: url('/static/image/0080c0f2-40a6-4e5c-9d1e-81a109cc5e83.webp'); background-size: cover; background-position: center;">
+    <div class="flex flex-col items-center justify-center min-h-screen p-4">
+        <div class="w-full md:w-2/3 lg:w-1/2 bg-white bg-opacity-80 p-6 rounded-lg shadow-lg">
+            <h1 class="font-bold text-2xl text-blue-600 mb-4 text-center">抽籤問事</h1>
+            <div class="mb-6">
+                <h2 class="font-semibold text-lg text-blue-600">想詢問的事情</h2>
+                <p class="mb-2">請在下方寫上詢問的事項</p>
+                <textarea id="problemSituation" class="w-full h-32 p-2.5 text-base border-gray-300 border rounded resize-none"></textarea>
+            </div>
+            <div class="mb-6">
+                <h2 class="font-semibold text-lg text-blue-600">抽籤</h2>
+                <p class="mb-2">點擊下方按鈕</p>
+                <button onclick="DrawStraws()" class="w-full px-5 py-2.5 bg-green-500 text-white border-none rounded cursor-pointer mb-3">抽籤</button>
+                <textarea id="signPoems" readonly class="w-full h-32 p-2.5 text-base border-gray-300 border rounded resize-none"></textarea>
+            </div>
+            <div>
+                <h2 class="font-semibold text-lg text-blue-600">解籤</h2>
+                <p class="mb-2">點擊下方按鈕</p>
+                <button onclick="Explain()" class="w-full px-5 py-2.5 bg-green-500 text-white border-none rounded cursor-pointer mb-3">解籤</button>
+                <textarea id="explain" readonly class="w-full h-32 p-2.5 text-base border-gray-300 border rounded resize-none"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div id="loading" class="fixed inset-0 z-10 hidden bg-black bg-opacity-40 overflow-auto">
+        <div class="relative p-5 bg-white rounded shadow-lg top-1/4 mx-auto w-1/3 text-center animate-pulse">
+            <div class="spinner-border animate-spin inline-block w-12 h-12 border-4 rounded-full" style="color: #3498db; border-color: #f3f3f3 transparent #f3f3f3 transparent;"></div>
+            <p class="text-lg font-bold mt-3">命理大師思考中，請稍候...</p>
+        </div>
+    </div>
+
+
+    <script>
+
+        function DrawStraws() {
+            const loadingDiv = document.getElementById("loading");
+            const problemSituation = document.getElementById("problemSituation");
+            const signPoems = document.getElementById("signPoems");
+
+            // 顯示 loading 特效
+            loadingDiv.style.display = "block";
+
+            // 發送 AJAX 請求到後端伺服器
+            fetch('/draw_straws', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    problemSituation: problemSituation.value
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.signPoems) {
+                        signPoems.value = data.signPoems;
+                    } else
+                        if (data.error) {
+                            alert(data.error);
+                        }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('發生錯誤，請稍後再試');
+                })
+                .finally(() => {
+                    // 隱藏 loading 特效
+                    loadingDiv.style.display = "none";
+                });
+        }
+
+        function Explain() {
+            const loadingDiv = document.getElementById("loading");
+            const problemSituation = document.getElementById("problemSituation");
+            const signPoems = document.getElementById("signPoems");
+            const explain = document.getElementById("explain");
+
+            // 顯示 loading 特效
+            loadingDiv.style.display = "block";
+
+            // 發送 AJAX 請求到後端伺服器
+            fetch('/explain', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    problemSituation: problemSituation.value,
+                    signPoems: signPoems.value
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.explain) {
+                        explain.value = data.explain;
+                    } else
+                        if (data.error) {
+                            alert(data.error);
+                        }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('發生錯誤，請稍後再試');
+                })
+                .finally(() => {
+                    // 隱藏 loading 特效
+                    loadingDiv.style.display = "none";
+                });
+        }
+
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/static/js/sw.js', { scope: '/static/js/' });
+        }
+    </script>
+</body>
+
+</html>
