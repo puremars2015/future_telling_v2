@@ -73,6 +73,11 @@ class Chance60Service:
         self.cursor.execute('SELECT * FROM TB_CHANCE_60')
         data = self.cursor.fetchall()
         return data
+    
+    def GetRecord(self):
+        self.cursor.execute('SELECT * FROM TB_DRAW_STRAWS_RECORD')
+        data = self.cursor.fetchall()
+        return data
 
     def GetCardById(self, id):
         self.cursor.execute('SELECT * FROM TB_CHANCE_60 WHERE ID = ?', (id,))
