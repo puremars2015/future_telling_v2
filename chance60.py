@@ -9,7 +9,7 @@ import sqlite3
 import json
 
 def CreateTable():
-    conn = sqlite3.connect('database/future_telling.db')
+    conn = sqlite3.connect('/data/future_telling.db')
 
     cursor = conn.cursor()
     cursor.execute('''CREATE TABLE IF NOT EXISTS DRAW_STRAWS_RECORD
@@ -22,7 +22,7 @@ def CreateTable():
 
 
 def ETL_excel_to_db():
-    conn = sqlite3.connect('database/future_telling.db')
+    conn = sqlite3.connect('/data/future_telling.db')
     df = pd.read_excel('chance60.xlsx')
 
     cursor = conn.cursor()
@@ -41,7 +41,7 @@ def ETL_excel_to_db():
     return True
 
 def ETL_db_to_json():
-    conn = sqlite3.connect('database/future_telling.db')
+    conn = sqlite3.connect('/data/future_telling.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM TB_CHANCE_60')
     data = cursor.fetchall()
@@ -66,7 +66,7 @@ def GetCardById(id):
 
 class Chance60Service:
     def __init__(self):
-        self.conn = sqlite3.connect('database/future_telling.db')
+        self.conn = sqlite3.connect('/data/future_telling.db')
         self.cursor = self.conn.cursor()
 
     def GetCard(self):

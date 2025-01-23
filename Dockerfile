@@ -6,6 +6,11 @@ FROM python:${PYTHON_VERSION}-slim
 
 LABEL fly_launch_runtime="flask"
 
+
+VOLUME /data
+COPY /database/future_telling.db /data/
+
+
 WORKDIR /code
 
 COPY requirements.txt requirements.txt
