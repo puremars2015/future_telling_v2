@@ -1,13 +1,13 @@
-version: '3.8'
+version: '3.8'  # 指定 docker-compose 文件的版本
 
-services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+services:  # 定義服務
+  app:  # 服務名稱為 app
+    build:  # 構建服務的指令
+      context: .  # 使用當前目錄作為構建上下文
+      dockerfile: Dockerfile  # 使用當前目錄中的 Dockerfile 來構建映像
     ports:
-      - "8080:8080"
+      - "8080:8080"  # 將主機的 8080 端口映射到容器的 8080 端口
     environment:
-      - FLASK_ENV=development
+      - FLASK_ENV=development  # 設置環境變量 FLASK_ENV 為 development
     volumes:
-      - .:/code
+      - .:/code  # 將當前目錄掛載到容器內的 /code 目錄

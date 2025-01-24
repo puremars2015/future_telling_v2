@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="個人基本資料">
+    <link rel="apple-touch-icon" href="/static/image/icon512.png">
+    <link rel="icon" href="/static/image/favicon-16x16.png" type="image/x-icon">
+    <title>個人基本資料</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style src="/static/css/style.css"></style>
+    <style>
+        body {
+            background-image: url("/static/image/0080c0f2-40a6-4e5c-9d1e-81a109cc5e83.webp");
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased m-0" style="background-image: url('/static/image/0080c0f2-40a6-4e5c-9d1e-81a109cc5e83.webp'); background-size: cover; background-position: center;">
+    <div class="flex flex-col items-center justify-center min-h-screen p-4">
+        <div class="w-full md:w-2/3 lg:w-1/2 bg-white bg-opacity-80 p-6 rounded-lg shadow-lg">
+            <h1 class="font-bold text-2xl text-blue-600 mb-4 text-center">個人基本資料</h1>
+            <form>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="name">姓名</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="請輸入姓名">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="birthdate">出生年月日時分</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="birthdate" type="datetime-local">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="phone">手機</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="phone" type="tel" placeholder="請輸入手機號碼">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="gender">性別</label>
+                    <div class="flex items-center">
+                        <input class="mr-2 leading-tight" type="radio" id="male" name="gender" value="male">
+                        <label class="text-gray-700" for="male">男</label>
+                        <input class="mr-2 ml-4 leading-tight" type="radio" id="female" name="gender" value="female">
+                        <label class="text-gray-700" for="female">女</label>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                        提交
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

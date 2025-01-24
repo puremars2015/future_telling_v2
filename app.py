@@ -6,8 +6,11 @@ from chance60 import Chance60Service
 import random
 
 from config import key
+from flask_cors import CORS
 
 app = Flask(__name__)
+
+CORS(app)
 
 # 設置您的 OpenAI API 密鑰
 api_key = key['OpenAI']
@@ -15,9 +18,67 @@ api_key = key['OpenAI']
 GPT = OpenAI(api_key=api_key)
 
 
-
+# 首頁
 @app.route('/')
 def index():
+    return render_template('index.html',  error=None)
+
+# 大師歡迎詞
+@app.route('/welcome')
+def view_welcome():
+    return render_template('index.html',  error=None)
+
+
+# 與大師對話
+@app.route('/chat')
+def view_chat():
+    return render_template('chat.html')
+
+# 與大師對話
+@app.route('/chat', methods=['POST'])
+def chat():
+    user_input = request.json.get('message')
+    if not user_input:
+        return jsonify({'response': '請輸入問題'})
+    
+    # 使用 OpenAI API 判斷問題屬性,是否需要籤詩
+    response = GPT.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "你是一個台灣命理問題分析機器人，專門判斷這個問題是否適合用媽祖60支籤詩。適合回答1,不適合回答0"},
+            {"role": "user", "content": user_input}
+        ]
+    )
+
+    # 使用 OpenAI API 判斷問題是否需要生辰八字
+    response = GPT.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "你是一個台灣命理問題分析機器人，專門判斷這個問題是否需要生辰八字。適合回答1,不適合回答0"},
+            {"role": "user", "content": user_input}
+        ]
+    )
+
+    # 使用 OpenAI API 生成回應
+    response = GPT.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "你是一個台灣命理大師，專門解答問題。"},
+            {"role": "user", "content": user_input}
+        ]
+    )
+    response_message = response.choices[0].message.content
+
+    return jsonify({'response': response_message, 'ok': True})
+
+
+# info
+@app.route('/info')
+def view_intro():
+    return render_template('info.html',  error=None)
+
+@app.route('/draw_straws', methods=['GET'])
+def view_draw_straws():
     return render_template('draw_straws.html',  error=None)
 
 @app.route('/draw_straws', methods=['POST'])

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="大師即時服務">
+    <link rel="apple-touch-icon" href="/static/image/icon512.png">
+    <link rel="icon" href="/static/image/favicon-16x16.png" type="image/x-icon">
+    <title>大師即時服務</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style src="/static/css/style.css"></style>
+    <style>
+        body {
+            background-image: url("/static/image/0080c0f2-40a6-4e5c-9d1e-81a109cc5e83.webp");
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+
+<body class="font-sans text-gray-800 antialiased m-0" style="background-image: url('/static/image/0080c0f2-40a6-4e5c-9d1e-81a109cc5e83.webp'); background-size: cover; background-position: center;">
+    <div class="flex flex-col items-center justify-center h-screen p-0 w-full">
+        <div class="w-full h-full bg-white bg-opacity-80 p-6 rounded-lg shadow-lg flex flex-col">
+            <h1 class="font-bold text-2xl text-blue-600 mb-4 text-center">大師即時服務</h1>
+            <div class="flex flex-col space-y-4 flex-grow overflow-hidden h-full">
+                <div class="bg-gray-100 p-4 rounded-lg shadow-inner flex-grow overflow-y-auto h-full chat-box">
+                    <div class="bg-blue-100 p-4 rounded-lg shadow-inner self-start mt-2"><strong>大師:</strong> 您好，您想問甚麼事情呢？</div>
+                    <!-- Add more chat messages here -->
+                </div>
+            </div>
+            <div class="flex items-center space-x-2 mt-4">
+                <input class="flex-1 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="chat-input" type="text" placeholder="請輸入您的問題...">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                    送出
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value;
+            if (message.trim() === '') return;
+
+            axios.post('http://127.0.0.1:5000/chat', { message })
+                .then(response => {
+                    input.value = '';
+                    const chatBox = document.querySelector('.chat-box');
+                    
+                    // Display the user's message
+                    const userMessageElement = document.createElement('div');
+                    userMessageElement.className = 'bg-gray-100 p-4 rounded-lg shadow-inner self-end';
+                    userMessageElement.innerHTML = `<strong>使用者:</strong> ${message}`;
+                    chatBox.appendChild(userMessageElement);
+
+                    // Display the server's response
+                    const result = response.data;
+                    if (result.ok) {
+                        const serverMessageElement = document.createElement('div');
+                        serverMessageElement.className = 'bg-blue-100 p-4 rounded-lg shadow-inner self-start mt-2';
+                        serverMessageElement.innerHTML = `<strong>大師:</strong> ${result.response}`;
+                        chatBox.appendChild(serverMessageElement);
+                    }
+
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                })
+                .catch(error => {
+                    console.error('Failed to send message', error);
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const button = document.querySelector('button[type="button"]');
+            button.addEventListener('click', sendMessage);
+        });
+
+        function noisy() {
+            console.log('noisy');
+        }
+    </script>
+</body>
+
+</html>
